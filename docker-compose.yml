@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      AWS_REGION: us-east-1
+      PINECONE_API_KEY: ${PINECONE_API_KEY}
+      REDIS_URL: redis://redis:6379
+    depends_on: [redis, elasticsearch]
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  elasticsearch:
+    image: elasticsearch:8.12.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports: ["9200:9200"]
+
+  celery-worker:
+    build: .
+    command: celery -A pipeline.tasks worker --loglevel=info
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on: [redis]
