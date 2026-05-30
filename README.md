@@ -1,5 +1,6 @@
 # AI Data Pipeline
 
+
 A Python-based backend pipeline that takes raw text input, calls the OpenAI API for classification and extraction, and stores structured results for downstream use.
 
 Built as a learning project to understand how to integrate LLM APIs into a backend service, and how to structure Python data pipelines with FastAPI.
