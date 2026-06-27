@@ -10,7 +10,7 @@ A Python backend pipeline that ingests raw text, extracts and classifies structu
 
 ## What Problem This Solves
 
-Manual classification and data extraction from unstructured text doesn't scale. This pipeline automates the full flow: raw text in via REST API, LLM extracts structured fields into JSON, results land in a queryable database - without any manual intervention.
+Manual classification and data extraction from unstructured text does not scale. This pipeline automates the full flow: raw text in via REST API, LLM extracts structured fields into JSON, results land in a queryable database without any manual intervention.
 
 This is the extraction core used in the [AI Document Intelligence Platform](https://github.com/Rajeshdevandla/ai-document-intelligence-platform). The pipeline also runs standalone for any generic text extraction task.
 
@@ -62,7 +62,7 @@ GET /results/{task_id}
 **Key design decisions:**
 - **Async via Celery + Redis** - API returns immediately; heavy LLM work runs in the background. Keeps the API responsive under load.
 - **Structured output prompt** - GPT-4o instructed to return JSON matching a fixed schema. Response validation catches malformed extractions.
-- **Retries with exponential backoff** - Celery retries failed tasks up to 3 times. OpenAI API errors don't lose work.
+- **Retries with exponential backoff** - Celery retries failed tasks up to 3 times. OpenAI API errors do not lose work.
 - **Preprocessing before LLM** - text normalization before the API call reduces token count and improves extraction accuracy.
 
 ## Tech Stack
@@ -142,87 +142,4 @@ ai-data-pipeline/
 
 ---
 
-Built by [Rajesh Kumar](https://rajeshdevandla.github.io) - Full Stack Java & AI Developer | Chicago, IL# AI Data Pipeline
-
-
-A Python-based backend pipeline that takes raw text input, calls the OpenAI API for classification and extraction, and stores structured results for downstream use.
-
-Built as a learning project to understand how to integrate LLM APIs into a backend service, and how to structure Python data pipelines with FastAPI.
-
-## What It Does
-
-- Accepts raw text or document content via a REST API endpoint
-- Preprocesses and cleans the text (normalization, whitespace handling)
-- Sends cleaned text to OpenAI API with a structured prompt for classification/extraction
-- Parses the JSON response and stores results in a database
-- Exposes a query endpoint to retrieve processed results
-
-## Tech Stack
-
-| Component | Technology |
-|---|---|
-| API | Python 3.11, FastAPI |
-| LLM | OpenAI API (GPT-4o) |
-| Data Processing | Pandas |
-| Queue | Celery + Redis |
-| Storage | PostgreSQL |
-| Infrastructure | Docker, Docker Compose |
-
-## How It Works
-
-```
-POST /process (text input)
-     ↓
-Text preprocessing (cleaning, normalization)
-     ↓
-OpenAI API call (extraction/classification prompt)
-     ↓
-Parse structured JSON response
-     ↓
-Store to PostgreSQL
-     ↓
-GET /results/{id} (retrieve processed output)
-```
-
-## Running Locally
-
-Prerequisites: Python 3.11+, Docker, OpenAI API key
-
-```bash
-git clone https://github.com/Rajeshdevandla/ai-data-pipeline.git
-cd ai-data-pipeline
-pip install -r requirements.txt
-# Add your OpenAI API key to .env
-uvicorn main:app --reload
-```
-
-API docs: `http://localhost:8000/docs`
-
-## Sample Request / Response
-
-```bash
-POST /process
-{ "text": "Invoice from Acme Corp dated March 15, 2024 for $4,590" }
-```
-
-```json
-{
-  "document_type": "Invoice",
-  "vendor": "Acme Corp",
-  "date": "2024-03-15",
-  "amount": 4590.00
-}
-```
-
-## What I Applied Here
-
-- Structuring a Python FastAPI project with clean routing and service layers
-- Calling OpenAI API with system/user prompts and parsing structured responses
-- Using Celery and Redis for async task processing
-- Handling failures gracefully with retries and error logging
-- Docker Compose for running the full stack locally
-
----
-
-**Rajesh Kumar** — Full Stack Java Developer | Chicago, IL
-[Portfolio](https://rajeshdevandla.github.io) · [GitHub](https://github.com/Rajeshdevandla)
+Built by [Rajesh Kumar](https://rajeshdevandla.github.io) - Full Stack Java & AI Developer | Chicago, IL
